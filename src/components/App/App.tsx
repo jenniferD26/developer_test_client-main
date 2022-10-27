@@ -1,8 +1,14 @@
 import People from '../People';
+import Navigation from '../Navigation';
+import Search from '../Search';
 
 function App() {
   return (
-    <People />
+    <div>
+      <Navigation />
+      <Search />
+      <People />
+    </div>
   );
 }
 
