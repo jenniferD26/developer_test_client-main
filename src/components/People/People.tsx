@@ -1,9 +1,18 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, FormEvent } from 'react'
 
 import { fetchJson } from '../../api'
 import { PersonType } from '../../types'
 import Person from '../Person'
+import Search from '../Search'
 import './People.css'
+
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+interface SearchProps{
+  people: Array<PersonType>;
+  query: string;
+}
 
 function People({pageLimit, dataLimit} :
   {
@@ -13,6 +22,7 @@ function People({pageLimit, dataLimit} :
   const [people, setPeople] = useState<PersonType[]>([])
   const [pages, setPages] = useState(1)
   const [currentPage, setCurrentPage] = useState(1)
+  const [query, setQuery] = useState("")
   let startIndex = currentPage * dataLimit - dataLimit;
 
   useEffect(() => {
@@ -20,27 +30,44 @@ function People({pageLimit, dataLimit} :
       .then(peopleResponse => {
         setPeople(peopleResponse.results);
         setPages(Math.round(peopleResponse.results.length / dataLimit));
-        console.log(pages);
       })
   }, [pageLimit, dataLimit, pages])
 
   function goToNextPage(){
     setCurrentPage((page) => page + 1);
-    // console.log("current page: " + currentPage);
   }
 
   function goToPreviousPage(){
     setCurrentPage((page) => page - 1);
-    // console.log("current page: " + currentPage);
   }
 
   const getPaginatedData = () => {
     // const startIndex = currentPage * dataLimit - dataLimit;
+    let filtered = filterPeople({people, query});
     const endIndex = startIndex + dataLimit;
-    return people.slice(startIndex, endIndex);
+    return filtered.slice(startIndex, endIndex);
   };
 
+  const handleOnChange = (event: FormEvent<HTMLInputElement>) => {
+    let text = (event.target as HTMLInputElement).value;
+    console.log(text);
+    setQuery(text);
+  }
+
+  const filterPeople = ({people, query} : SearchProps) => {
+    if(!query){
+        return people;
+    }
+
+    return people.filter((person: PersonType) => {
+        const personName = person.name.toLowerCase();
+        return personName.includes(query);
+    })
+  }
+
   return (
+    <>
+    <Search handleOnChange={handleOnChange}/>
     <div className='page-section' id='people-section'>
       <div className='pagination'>
         <button
@@ -62,6 +89,7 @@ function People({pageLimit, dataLimit} :
                     id={startIndex + currIndex + 1} />)}
       </div>
     </div>
+    </>
   )
 }
 

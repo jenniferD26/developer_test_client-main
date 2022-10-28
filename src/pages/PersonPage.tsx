@@ -28,7 +28,6 @@ export function PersonPage() {
 
     function getId(url: string) : string {
         const chunks = url.split('/');
-        console.log(chunks[chunks.length - 2]);
         return chunks[chunks.length - 2];
     }
 
