@@ -8,7 +8,10 @@ function App() {
     <Navigation />
       <div id='content'>
         <Search />
-        <People />
+        <People 
+          pageLimit={5}
+          dataLimit={4} 
+          />
       </div>
     </div>
   );
