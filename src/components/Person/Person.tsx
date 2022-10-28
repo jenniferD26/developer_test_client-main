@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { PersonType } from '../../types';
-import './Person.css';
 
 interface PersonProps {
   person: PersonType

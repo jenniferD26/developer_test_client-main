@@ -1,5 +1,4 @@
 import People from '../components/People';
-import Search from '../components/Search';
 
 export function HomePage(){
     return(        

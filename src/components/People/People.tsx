@@ -4,7 +4,6 @@ import { fetchJson } from '../../api'
 import { PersonType } from '../../types'
 import Person from '../Person'
 import Search from '../Search'
-import './People.css'
 
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

@@ -1,5 +1,3 @@
-import { PersonType } from "../../types";
-
 function Search({handleOnChange} : {handleOnChange: any}) {
     return (      
     <div className="page-section" id="search-section">
