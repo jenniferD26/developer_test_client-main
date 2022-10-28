@@ -13,6 +13,7 @@ function People({pageLimit, dataLimit} :
   const [people, setPeople] = useState<PersonType[]>([])
   const [pages, setPages] = useState(1)
   const [currentPage, setCurrentPage] = useState(1)
+  let startIndex = currentPage * dataLimit - dataLimit;
 
   useEffect(() => {
     fetchJson<{ results: PersonType[] }>('people')
@@ -21,34 +22,23 @@ function People({pageLimit, dataLimit} :
         setPages(Math.round(peopleResponse.results.length / dataLimit));
         console.log(pages);
       })
-  }, [])
+  }, [pageLimit, dataLimit, pages])
 
   function goToNextPage(){
     setCurrentPage((page) => page + 1);
+    // console.log("current page: " + currentPage);
   }
 
   function goToPreviousPage(){
     setCurrentPage((page) => page - 1);
-  }
-
-  function changePage(event: React.MouseEvent<HTMLButtonElement>) {
-    const pageNumber = Number(event.currentTarget.textContent);
-    setCurrentPage(pageNumber);
-    console.log("Selected page " + pageNumber);
+    // console.log("current page: " + currentPage);
   }
 
   const getPaginatedData = () => {
-    const startIndex = currentPage * dataLimit - dataLimit
+    // const startIndex = currentPage * dataLimit - dataLimit;
     const endIndex = startIndex + dataLimit;
     return people.slice(startIndex, endIndex);
   };
-
-  const getPaginationGroup = () => {
-    // let start = Math.floor((currentPage - 1) / pageLimit) *  pageLimit;
-    let start = currentPage - 1;
-    let newArray = new Array(pageLimit).map((idx) => start + idx + 1);
-    return newArray;
-  }
 
   return (
     <div className='page-section' id='people-section'>
@@ -58,14 +48,7 @@ function People({pageLimit, dataLimit} :
             className={`prev ${currentPage === 1 ?  'disabled' : ''}`}>
             prev
           </button>
-            {getPaginationGroup().map((item, index) => {
-            <button
-              key={index}
-              onClick={changePage}
-              className={`paginationItem ${currentPage === item ? 'active' : null}`}>
-              <span>{item}</span>
-            </button>
-                    })}
+
             <button
                 onClick={goToNextPage} 
                 className={`next ${currentPage === pages ?  'disabled' : ''}`}>
@@ -73,22 +56,11 @@ function People({pageLimit, dataLimit} :
             </button>
         </div>
         <div className='people-container'>
-          {getPaginatedData().map((person, idx) => 
-            <Person key={idx}
+          {getPaginatedData().map((person, currIndex) => 
+            <Person key={currIndex}
                     person={person}
-                    id={idx + 1} />)}
+                    id={startIndex + currIndex + 1} />)}
       </div>
-      {/* <Pagination
-        data={people}
-        title="star wars"
-        pageLimit={5}
-        dataLimit={4}
-      /> */}
-      {/* <div className='people-container'>
-          {people.map((person, idx) => 
-            <Person key={idx}
-                    person={person} />)}
-      </div> */}
     </div>
   )
 }

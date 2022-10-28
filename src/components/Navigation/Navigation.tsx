@@ -5,7 +5,7 @@ function Navigation(){
     return(
         <div id='fixed-nav'>
             <nav id='nav-container'>
-                <Link to="/">Test</Link>
+                <Link to="/">Home</Link>
             </nav>
         </div>
     )

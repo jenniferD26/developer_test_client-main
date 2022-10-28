@@ -3,7 +3,7 @@ import Search from '../components/Search';
 
 export function HomePage(){
     return(        
-        <div id='content'>
+        <div className='content'>
         <Search />
         <People 
             pageLimit={5}

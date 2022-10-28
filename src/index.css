@@ -27,10 +27,11 @@ code {
   overflow-x: hidden;
 }
 
-#content {
+.content {
   position: absolute;
   display: block;
   height: 100%;
+  margin-top: 61px;
 }
 
 .page-section {
