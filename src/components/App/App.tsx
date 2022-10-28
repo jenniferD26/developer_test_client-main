@@ -1,19 +1,21 @@
-import People from '../People';
 import Navigation from '../Navigation';
-import Search from '../Search';
+
+import { HomePage } from '../../pages/HomePage';
+import { PersonPage } from '../../pages/PersonPage';
+
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div id='bg'>
-    <Navigation />
-      <div id='content'>
-        <Search />
-        <People 
-          pageLimit={5}
-          dataLimit={4} 
-          />
+    <Router>
+      <div id='bg'>
+        <Navigation />
+        <Routes>
+          <Route path="/" element={<HomePage />}/>
+          <Route path="person/:id" element={<PersonPage />} />
+        </Routes>
       </div>
-    </div>
+    </Router>
   );
 }
 

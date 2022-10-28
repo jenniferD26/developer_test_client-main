@@ -75,7 +75,8 @@ function People({pageLimit, dataLimit} :
         <div className='people-container'>
           {getPaginatedData().map((person, idx) => 
             <Person key={idx}
-                    person={person} />)}
+                    person={person}
+                    id={idx + 1} />)}
       </div>
       {/* <Pagination
         data={people}

@@ -7,7 +7,7 @@ describe('<Person />', () => {
   test('should render the person\'s name', () => {
     const person: PersonType = { name: 'Jek Tono Porkins'}
 
-    render(<Person person={person} />)
+    render(<Person person={person} id={0} />)
 
     screen.getByText(person.name)
   })
