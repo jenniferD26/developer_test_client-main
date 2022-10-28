@@ -1,0 +1,20 @@
+
+#fixed-nav{
+    position: fixed;
+    display: block;
+    z-index: 1;
+    width: 100vw;
+}
+
+#nav-container{
+    background-color: #1e2127;
+    color: #fff;
+    display: flex;
+    flex-flow: row-reverse;
+    padding: 20px;
+}
+
+#nav-container a:link, a:visited, a:hover{
+    color: #fff;
+    text-decoration: none;
+}
