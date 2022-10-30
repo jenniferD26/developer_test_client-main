@@ -8,28 +8,23 @@ import Search from '../Search'
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PaginationButton from '../PaginationButton'
+import  apiClient from '../../api/http.common'
 
 interface SearchProps{
   people: Array<PersonType>;
   query: string;
 }
 
-function People({pageLimit, dataLimit} :
-  {
-      pageLimit: number;
-      dataLimit: number;
-  }) {
+function People() {
   const [people, setPeople] = useState<PersonType[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const [query, setQuery] = useState("")
-  let startIndex = currentPage * dataLimit - dataLimit;
+  // let startIndex = currentPage * 10 - 10;
 
   useEffect(() => {
-    fetchJson<{ results: PersonType[] }>('people')
-      .then(peopleResponse => {
-        setPeople(peopleResponse.results);
-      })
-  }, [pageLimit, dataLimit])
+    getPeople(currentPage);
+    console.log("useEffect");
+  });
 
   function goToNextPage(){
     setCurrentPage((page) => page + 1);
@@ -39,16 +34,26 @@ function People({pageLimit, dataLimit} :
     setCurrentPage((page) => page - 1);
   }
 
+  const getPeople = (id: number) => {
+    apiClient.get(`api/?=${id}`)
+    .then(response => {
+      setPeople(response.data.results);
+    })
+    .catch(error => console.log(error));
+  }
+
   const getPaginatedData = () => {
     // const startIndex = currentPage * dataLimit - dataLimit;
-    let filtered = filterPeople({people, query});
-    const endIndex = startIndex + dataLimit;
-    return filtered.slice(startIndex, endIndex);
+
+    // let filtered = filterPeople({people, query});
+    // const endIndex = startIndex + 10;
+    // return filtered.slice(startIndex, endIndex);
+    // return people;
   };
 
   function getMaxPages() {
     let filtered = filterPeople({people, query});
-    return Math.ceil(filtered.length / dataLimit);
+    return Math.ceil(filtered.length / 10);
   }
 
   const handleOnChange = (event: FormEvent<HTMLInputElement>) => {
@@ -79,15 +84,15 @@ function People({pageLimit, dataLimit} :
                           text={"prev"} />
         <PaginationButton onClick={goToNextPage}
                           currentPage={currentPage}
-                          disableLimit={getMaxPages()}
+                          disableLimit={82}
                           className={"next"}
                           text={"next"} />
         </div>
         <div className='people-container'>
-          {getPaginatedData().map((person, currIndex) => 
+          {people.map((person, currIndex) => 
             <Person key={currIndex}
                     person={person}
-                    id={startIndex + currIndex + 1} />)}
+                    id={currIndex + 1} />)}
       </div>
     </div>
     </>

@@ -11,7 +11,6 @@ function Film({id} : {id: string}) {
     useEffect(() => {
         fetchJson(`films/${id}`)
             .then(response => {
-                // console.log(response);
                 setFilm(response);
             })
     }, [id])
