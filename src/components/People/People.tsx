@@ -7,6 +7,7 @@ import Search from '../Search'
 
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import PaginationButton from '../PaginationButton'
 
 interface SearchProps{
   people: Array<PersonType>;
@@ -19,7 +20,6 @@ function People({pageLimit, dataLimit} :
       dataLimit: number;
   }) {
   const [people, setPeople] = useState<PersonType[]>([])
-  const [pages, setPages] = useState(1)
   const [currentPage, setCurrentPage] = useState(1)
   const [query, setQuery] = useState("")
   let startIndex = currentPage * dataLimit - dataLimit;
@@ -28,9 +28,8 @@ function People({pageLimit, dataLimit} :
     fetchJson<{ results: PersonType[] }>('people')
       .then(peopleResponse => {
         setPeople(peopleResponse.results);
-        setPages(Math.round(peopleResponse.results.length / dataLimit));
       })
-  }, [pageLimit, dataLimit, pages])
+  }, [pageLimit, dataLimit])
 
   function goToNextPage(){
     setCurrentPage((page) => page + 1);
@@ -47,9 +46,13 @@ function People({pageLimit, dataLimit} :
     return filtered.slice(startIndex, endIndex);
   };
 
+  function getMaxPages() {
+    let filtered = filterPeople({people, query});
+    return Math.ceil(filtered.length / dataLimit);
+  }
+
   const handleOnChange = (event: FormEvent<HTMLInputElement>) => {
     let text = (event.target as HTMLInputElement).value;
-    console.log(text);
     setQuery(text);
   }
 
@@ -69,17 +72,16 @@ function People({pageLimit, dataLimit} :
     <Search handleOnChange={handleOnChange}/>
     <div className='page-section' id='people-section'>
       <div className='pagination'>
-        <button
-            onClick={goToPreviousPage} 
-            className={`prev ${currentPage === 1 ?  'disabled' : ''}`}>
-            prev
-          </button>
-
-            <button
-                onClick={goToNextPage} 
-                className={`next ${currentPage === pages ?  'disabled' : ''}`}>
-                next
-            </button>
+        <PaginationButton onClick={goToPreviousPage}
+                          currentPage={currentPage}
+                          disableLimit={1}
+                          className={"prev"}
+                          text={"prev"} />
+        <PaginationButton onClick={goToNextPage}
+                          currentPage={currentPage}
+                          disableLimit={getMaxPages()}
+                          className={"next"}
+                          text={"next"} />
         </div>
         <div className='people-container'>
           {getPaginatedData().map((person, currIndex) => 
