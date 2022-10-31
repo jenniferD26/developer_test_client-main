@@ -8,6 +8,7 @@ interface PageButtonProps{
 
 function PaginationButton({onClick, currentPage, disableLimit, className, text} : PageButtonProps) {
 
+    // Checks if the button is disabled
     function isDisabled(){
         return currentPage === disableLimit;
     }

@@ -8,10 +8,10 @@ interface PersonProps {
 
 function Person({ person, id }: PersonProps) {
   return <Link to={`person/${id}`}>
-  <div className='person'>
+    <div className='person'>
       {person.name}
     </div>
-    </Link>
+  </Link>
 }
 
 export default Person

@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
-import { PersonType } from '../types';
-import { fetchJson } from '../api';
 import { useParams } from 'react-router-dom';
-import Film from '../components/Film';
 
+import { PersonType } from '../types';
+import apiClient from '../api/http.common';
 
 export function PersonPage() {
     const { id } = useParams() as { id?: string };
@@ -19,27 +18,40 @@ export function PersonPage() {
         films: new Array<string>("")
     });
 
-    useEffect(() => {
-        fetchJson(`people/${id}`)
-            .then(response => {
-                setPerson(response);
-            })
-    }, [id])
+    // 
+    useEffect(() => {    
+        apiClient.get(`/People/?person=${id}`)
+        .then(response => {
+            console.log(response);
+            setPerson(response.data);
+    })
+    .catch(error => console.log(error));
+    }, [id, person])
 
+    // Gets the id of a film based on a url string
     function getId(url: string) : string {
         const chunks = url.split('/');
         return chunks[chunks.length - 2];
     }
 
+    // Finds the film title from the api
+    const getFilmTitle  = async () => {
+
+        const films = await person.films.map(filmUrl => {
+            apiClient.get(`/Films/?id=${getId(filmUrl)}`)
+            .then(response => response.data.title)
+        })
+
+        return Promise.resolve(films);
+    }
 
     return (
         <div className='content'>
             <h1>{person.name}</h1>
             <h1>{person.hair_color}</h1>
-            {person.films.map((filmId) => 
-                <Film key={filmId}
-                      id={getId(filmId)}/>
-            )}
+            {getFilmTitle().map(film => {
+                <h1>{film}</h1>
+            })}
         </div>
     )
 }
